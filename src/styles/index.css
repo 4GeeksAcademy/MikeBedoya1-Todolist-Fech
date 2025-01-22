@@ -1,11 +1,29 @@
-/* 
+body{
+    background-color: seashell;
+}
+h1{
+    font-family: "Lucida Console", Courier, monospace;
+    color:rgb(248, 224, 224);
+	text-align: center;
+	font-size:120px;
+	right:0;
+	left:0;	
+}
+.btn {
+	opacity: 0; 
+    transition: opacity 0.3s ease;
+}
+.btn:hover {
+	opacity: 1;
+}
+.form-control {
+ border-radius: 0%;
 
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
-
-*/
+}
+h6 {
+	font-family: none;
+}
+.my-1.list-group-item.d-flex.justify-content-between.mt-0 {
+	border-radius: 0%;
+	height: 35px;
+  }
