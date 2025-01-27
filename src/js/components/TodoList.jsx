@@ -9,17 +9,11 @@ const TodoList = () => {
         fetch("https://playground.4geeks.com/todo/users/Mike")
             .then((response) => response.json())
             .then((data) => setTodos(data.todos))
-            .catch((error) => console.error("Error fetching todos:", error));
+
     }
 
 
     function addTodo(e) {
-        e.preventDefault();
-
-        if (newTodo.trim() === "") {
-            return;
-        }
-
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -34,8 +28,18 @@ const TodoList = () => {
             .then((data) => {
                 setTodos((prevTodos) => [...prevTodos, data.todo]);
                 setNewTodo("");
+                getTodos();
             })
-            .catch((error) => console.error("Error adding todo:", error));
+
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (newTodo.trim()) {
+                addTodo();
+            }
+        }
     }
 
 
@@ -50,6 +54,7 @@ const TodoList = () => {
             .then((result) => {
                 console.log(result),
                     setTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
+                getTodos()
             })
     }
 
@@ -81,9 +86,11 @@ const TodoList = () => {
 
                 fetch("https://playground.4geeks.com/todo/users/Mike\n", requestOptions)
                     .then((response) => response.text())
-                    .then((result) => console.log(result));
-                    setNewTodo([]);
-                    setNewTodo("");
+                    .then(() => {
+                        setTodos([]);
+                        setNewTodo("");
+                    })
+
             }
             )
     }
@@ -91,13 +98,13 @@ const TodoList = () => {
     useEffect(() => {
         console.log('Componente cargado');
         getTodos();
-        
+
     }, []);
 
     return (
         <div className="container">
             <h1 className="text-center my-4">Todos</h1>
-            <form onSubmit={addTodo}>
+            <form>
                 <div className="input-group mb-0">
                     <input
                         type="text"
@@ -105,19 +112,22 @@ const TodoList = () => {
                         onChange={(e) => setNewTodo(e.target.value)}
                         value={newTodo}
                         placeholder="Add a task"
+                        onKeyDown={handleKeyPress}
                     />
                     <button type='button' className='gap-3 bg-danger' onClick={deleteAll}>Delete all</button>
                 </div>
             </form>
             <ul className="list-group">
-                {todos.map((todo, index) => (
-                    <li key={todo.id || index} className="list-group-item d-flex justify-content-between align-items-center">
-                        {todo.label}
-                        <button className="btn" onClick={() => deleteTodo(todo.id)}>
-                            <i className="fa-solid fa-x"></i>
-                        </button>
-                    </li>
-                ))}
+                {Array.isArray(todos) && todos.length > 0 ? (
+                    todos.map((todo, index) => (
+                        <li key={todo?.id || index} className="list-group-item d-flex justify-content-between align-items-center">
+                            {todo?.label || 'Sin descripción'}
+                            <button className="btn" onClick={() => deleteTodo(todo?.id)}>
+                                <i className="fa-solid fa-x"></i>
+                            </button>
+                        </li>
+                    ))
+                ) : null}
                 <div className="my-1 list-group-item d-flex justify-content-between mt-0">
                     <h6>{todos.length} item left</h6>
                 </div>
