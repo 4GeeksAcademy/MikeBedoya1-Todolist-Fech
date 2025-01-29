@@ -129,7 +129,7 @@ const TodoList = () => {
                     ))
                 ) : null}
                 <div className="my-1 list-group-item d-flex justify-content-between mt-0">
-                    <h6>{todos.length} item left</h6>
+                <h6>{todos && todos.length > 0 ? todos.length : 0} item left</h6>
                 </div>
             </ul>
         </div>
